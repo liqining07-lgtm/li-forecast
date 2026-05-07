@@ -1,0 +1,112 @@
+{\rtf1\ansi\ansicpg936\cocoartf2869
+\cocoatextscaling0\cocoaplatform0{\fonttbl\f0\fswiss\fcharset0 Helvetica;}
+{\colortbl;\red255\green255\blue255;}
+{\*\expandedcolortbl;;}
+\paperw11900\paperh16840\margl1440\margr1440\vieww11520\viewh8400\viewkind0
+\pard\tx720\tx1440\tx2160\tx2880\tx3600\tx4320\tx5040\tx5760\tx6480\tx7200\tx7920\tx8640\pardirnatural\partightenfactor0
+
+\f0\fs24 \cf0 <!DOCTYPE html>\
+<html lang="zh">\
+<head>\
+<meta charset="UTF-8">\
+<title>\uc0\u26446 \u23425 \'b7\u32456 \u26497 \u29256 \u24320 \u22870 \u31995 \u32479 </title>\
+\
+<style>\
+body\{background:#0f172a;color:#fff;text-align:center;font-family:Arial;\}\
+.box\{margin:20px auto;width:95%;max-width:700px;\}\
+h1\{color:#22c55e;\}\
+button\{padding:10px 20px;margin:10px;background:#22c55e;border:none;color:#fff;border-radius:8px;\}\
+.result,.history,.stats\{background:#1e293b;padding:15px;border-radius:10px;margin-top:15px;\}\
+</style>\
+\
+</head>\
+\
+<body>\
+\
+<div class="box">\
+<h1>\uc0\u55357 \u56522  \u26446 \u23425 \'b7\u32456 \u26497 \u29256 \u24320 \u22870 \u31995 \u32479 </h1>\
+\
+<button onclick="load()">\uc0\u55357 \u56580  \u21047 \u26032 \u24320 \u22870 </button>\
+\
+<div class="result" id="out">\uc0\u21152 \u36733 \u20013 ...</div>\
+\
+<div class="stats" id="stats">\uc0\u55357 \u56520  \u32479 \u35745 \u21152 \u36733 \u20013 ...</div>\
+\
+<div class="history" id="history">\uc0\u55357 \u56540  \u21382 \u21490 \u35760 \u24405 \u21152 \u36733 \u20013 ...</div>\
+\
+</div>\
+\
+<script>\
+let historyData = [];\
+\
+async function load()\{\
+  try\{\
+    document.getElementById("out").innerHTML="\uc0\u9203  \u33719 \u21462 \u20013 ...";\
+\
+    let api = "https://api.allorigins.win/raw?url=" +\
+      encodeURIComponent("https://api.api68.com/Lottery/getLotteryList.do?lotCode=10048");\
+\
+    let r = await fetch(api);\
+    let j = await r.json();\
+\
+    let list = j.result.data;\
+\
+    let latest = list[0];\
+\
+    // \uc0\u26368 \u26032 \u24320 \u22870 \
+    document.getElementById("out").innerHTML =\
+      "\uc0\u55357 \u56522  \u26399 \u21495 \u65306 "+latest.preDrawIssue+\
+      "<br>\uc0\u55356 \u57263  \u24320 \u22870 \u65306 "+latest.preDrawCode+\
+      "<br>\uc0\u9200  \u26102 \u38388 \u65306 "+latest.preDrawTime;\
+\
+    // \uc0\u21382 \u21490 \
+    historyData = list.slice(0,10);\
+    renderHistory();\
+\
+    // \uc0\u32479 \u35745 \
+    renderStats();\
+\
+  \}catch(e)\{\
+    document.getElementById("out").innerHTML="\uc0\u10060  \u33719 \u21462 \u22833 \u36133 ";\
+  \}\
+\}\
+\
+// \uc0\u21382 \u21490 \u35760 \u24405 \
+function renderHistory()\{\
+  let html="\uc0\u55357 \u56540  \u26368 \u36817 10\u26399 \u65306 <br>";\
+  historyData.forEach(d=>\{\
+    html += d.preDrawIssue+" \uc0\u8594  "+d.preDrawCode+"<br>";\
+  \});\
+  document.getElementById("history").innerHTML = html;\
+\}\
+\
+// \uc0\u31616 \u21333 \u32479 \u35745 \u65288 \u28909 \u21495 \u65289 \
+function renderStats()\{\
+  let count = \{\};\
+\
+  historyData.forEach(d=>\{\
+    let nums = d.preDrawCode.split(",");\
+    nums.forEach(n=>\{\
+      count[n] = (count[n]||0)+1;\
+    \});\
+  \});\
+\
+  let sorted = Object.entries(count).sort((a,b)=>b[1]-a[1]).slice(0,5);\
+\
+  let html="\uc0\u55357 \u56520  \u28909 \u21495 TOP5\u65306 <br>";\
+  sorted.forEach(i=>\{\
+    html += i[0]+"\uc0\u65288 \u20986 \u29616 "+i[1]+"\u27425 \u65289 <br>";\
+  \});\
+\
+  document.getElementById("stats").innerHTML = html;\
+\}\
+\
+// \uc0\u33258 \u21160 \u21047 \u26032 \
+setInterval(load,60000);\
+\
+// \uc0\u21021 \u22987 \u21152 \u36733 \
+load();\
+</script>\
+\
+</body>\
+</html>}
